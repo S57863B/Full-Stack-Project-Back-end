@@ -28,7 +28,7 @@ export async function createTask(req, res) {
     const { project, error } = await authorizeProject(projectId, req.user._id);
     if (error) return res.status(error.status).json({ message: error.message });
 
-    const { title, description, status, priority } = req.body;
+    const { title, description, status, priority, tags, due } = req.body;
     if (!title) {
       return res.status(400).json({ message: 'Task title is required' });
     }
@@ -38,6 +38,8 @@ export async function createTask(req, res) {
       description,
       status,
       priority,
+      tags,
+      due,
       project: project._id, // link to the parent project
       owner: req.user._id, // who created it
     });
@@ -84,11 +86,13 @@ export async function updateTask(req, res) {
       return res.status(404).json({ message: 'Task not found in this project' });
     }
 
-    const { title, description, status, priority } = req.body;
+    const { title, description, status, priority, tags, due } = req.body;
     if (title !== undefined) task.title = title;
     if (description !== undefined) task.description = description;
     if (status !== undefined) task.status = status;
     if (priority !== undefined) task.priority = priority;
+    if (tags !== undefined) task.tags = tags;
+    if (due !== undefined) task.due = due;
 
     const updated = await task.save(); // re-runs enum + length validation
     return res.status(200).json(updated);

@@ -26,6 +26,22 @@ const taskSchema = new mongoose.Schema(
       default: 'med',
     },
 
+    tags: {
+      type: [
+        {
+          type: String,
+          trim: true,
+          maxlength: [24, 'A tag cannot exceed 24 characters'],
+        },
+      ],
+      default: [],
+    },
+
+    due: {
+      type: Date,
+      default: null,
+    },
+
     project: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Project',

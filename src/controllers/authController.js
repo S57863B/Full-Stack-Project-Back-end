@@ -31,6 +31,7 @@ export async function register(req, res) {
 
     return res.status(201).json(authResponse(user));
   } catch (err) {
+    console.error('REGISTER ERROR:', err);
     if (err.name === 'ValidationError') {
       const msg = Object.values(err.errors)[0].message;
       return res.status(400).json({ message: msg });
